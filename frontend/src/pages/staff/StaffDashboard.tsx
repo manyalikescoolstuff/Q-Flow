@@ -29,30 +29,30 @@ export function StaffDashboardPage() {
 
   /* ---------------------------------------------------------------- */
   /*  Elapsed service time                                            */
-  /*  Resets to 0 whenever the current token ID changes and ticks     */
-  /*  every second from that moment forward.                          */
+  /*  Synchronized with counter.servingStartedAt in the shared store. */
+  /*  Resets to 00:00 on token transition and ticks live each second.  */
   /* ---------------------------------------------------------------- */
   const [elapsedSec, setElapsedSec] = useState(0);
-  const timerOriginRef = useRef<number>(Date.now());
 
   const currentTokenId = currentToken?.id ?? null;
+  const servingStartedAt = counter?.servingStartedAt ?? null;
 
   useEffect(() => {
-    if (!currentTokenId) {
+    if (!currentTokenId || !servingStartedAt) {
       setElapsedSec(0);
       return;
     }
 
-    // Reset origin to NOW whenever a new token starts being served
-    timerOriginRef.current = Date.now();
-    setElapsedSec(0);
+    const updateTimer = () => {
+      setElapsedSec(
+        Math.max(0, Math.floor((Date.now() - servingStartedAt) / 1000)),
+      );
+    };
 
-    const interval = setInterval(() => {
-      setElapsedSec(Math.floor((Date.now() - timerOriginRef.current) / 1000));
-    }, 1000);
-
+    updateTimer();
+    const interval = setInterval(updateTimer, 1000);
     return () => clearInterval(interval);
-  }, [currentTokenId]);
+  }, [currentTokenId, servingStartedAt]);
 
   /* ---------------------------------------------------------------- */
   /*  Action feedback toast                                           */

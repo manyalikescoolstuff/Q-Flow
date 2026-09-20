@@ -55,6 +55,8 @@ export const SEED_SERVICES: Record<string, Service> = {
 const today = new Date();
 today.setHours(9, 0, 0, 0);
 
+export const STORE_BOOT_TIME = Date.now();
+
 function makeIso(minutesOffset: number): string {
   const d = new Date(today);
   d.setMinutes(d.getMinutes() + minutesOffset);
@@ -62,7 +64,7 @@ function makeIso(minutesOffset: number): string {
 }
 
 function makeRecentIso(secondsAgo: number): string {
-  return new Date(Date.now() - secondsAgo * 1000).toISOString();
+  return new Date(STORE_BOOT_TIME - secondsAgo * 1000).toISOString();
 }
 
 export const SEED_TOKENS: Record<string, Token> = {
@@ -280,6 +282,7 @@ export const SEED_COUNTERS: Record<string, Counter> = {
     servedToday: 2,
     avgServiceTimeSec: 290,
     utilizationRate: 82,
+    servingStartedAt: STORE_BOOT_TIME - 45_000, // 45s ago
   },
   'ctr-02': {
     id: 'ctr-02',
@@ -292,6 +295,7 @@ export const SEED_COUNTERS: Record<string, Counter> = {
     servedToday: 4,
     avgServiceTimeSec: 230,
     utilizationRate: 88,
+    servingStartedAt: STORE_BOOT_TIME - 75_000, // 1m 15s ago
   },
   'ctr-03': {
     id: 'ctr-03',
@@ -304,6 +308,7 @@ export const SEED_COUNTERS: Record<string, Counter> = {
     servedToday: 3,
     avgServiceTimeSec: 350,
     utilizationRate: 76,
+    servingStartedAt: STORE_BOOT_TIME - 110_000, // 1m 50s ago
   },
   'ctr-04': {
     id: 'ctr-04',
@@ -316,6 +321,7 @@ export const SEED_COUNTERS: Record<string, Counter> = {
     servedToday: 1,
     avgServiceTimeSec: 400,
     utilizationRate: 65,
+    servingStartedAt: STORE_BOOT_TIME - 30_000, // 30s ago
   },
   'ctr-05': {
     id: 'ctr-05',
@@ -328,6 +334,7 @@ export const SEED_COUNTERS: Record<string, Counter> = {
     servedToday: 5,
     avgServiceTimeSec: 460,
     utilizationRate: 92,
+    servingStartedAt: STORE_BOOT_TIME - 140_000, // 2m 20s ago
   },
   'ctr-06': {
     id: 'ctr-06',
@@ -340,6 +347,7 @@ export const SEED_COUNTERS: Record<string, Counter> = {
     servedToday: 0,
     avgServiceTimeSec: 0,
     utilizationRate: 0,
+    servingStartedAt: null,
   },
 };
 

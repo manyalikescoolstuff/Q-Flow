@@ -137,6 +137,7 @@ export const useQFlowStore = create<QFlowState>((set) => ({
             ...counter,
             currentTokenId: nextTokenId,
             servedToday: counter.servedToday + 1,
+            servingStartedAt: nextTokenId ? Date.now() : null,
           },
         },
       };
@@ -181,6 +182,7 @@ export const useQFlowStore = create<QFlowState>((set) => ({
           [counterId]: {
             ...counter,
             currentTokenId: nextTokenId,
+            servingStartedAt: nextTokenId ? Date.now() : null,
           },
         },
       };

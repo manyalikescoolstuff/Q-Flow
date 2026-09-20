@@ -125,22 +125,29 @@ export function CountersPage() {
             <tbody>
               {counters.map((item) => {
                 const isPaused = item.isPaused;
-                const hasServingToken = !isPaused && item.currentTokenId && item.calledAt;
+                const hasServingToken =
+                  !isPaused && !!item.currentTokenId && !!item.servingStartedAt;
 
-                // Compute live elapsed service duration
+                // Compute live elapsed service duration from the shared servingStartedAt timestamp
                 let elapsedSec = 0;
                 let durationFormatted = '—';
                 let isLongDuration = false;
 
-                if (hasServingToken && item.calledAt) {
+                if (hasServingToken && item.servingStartedAt) {
                   elapsedSec = Math.max(
                     0,
-                    Math.floor((now - new Date(item.calledAt).getTime()) / 1000),
+                    Math.floor((now - item.servingStartedAt) / 1000),
                   );
                   durationFormatted = formatTimer(elapsedSec);
 
-                  // Flag if duration exceeds 1.5x expected service duration (simple deterministic threshold)
-                  if (elapsedSec > item.expectedDurationSec * 1.5) {
+                  const avgServiceTimeSec =
+                    item.avgServiceTimeSec > 0
+                      ? item.avgServiceTimeSec
+                      : item.expectedDurationSec;
+                  if (
+                    avgServiceTimeSec > 0 &&
+                    elapsedSec > avgServiceTimeSec * 1.5
+                  ) {
                     isLongDuration = true;
                   }
                 }
@@ -179,7 +186,7 @@ export function CountersPage() {
                         {isLongDuration && (
                           <span
                             className="admin-counters__attention-badge"
-                            title={`Serving duration exceeds expected ${formatTimer(item.expectedDurationSec)} benchmark`}
+                            title={`Serving duration exceeds 1.5× average service time benchmark (${formatTimer(item.avgServiceTimeSec || item.expectedDurationSec)})`}
                           >
                             LONG SERVICE
                           </span>

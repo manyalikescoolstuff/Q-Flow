@@ -22,4 +22,6 @@ export interface Counter {
   avgServiceTimeSec: number;
   /** Counter operational utilization rate percentage (0-100) */
   utilizationRate?: number;
+  /** Epoch timestamp (ms) when the current token began service, or null if idle/paused */
+  servingStartedAt?: number | null;
 }

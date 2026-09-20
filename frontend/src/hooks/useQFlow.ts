@@ -516,6 +516,7 @@ export interface AdminCounterItem {
   currentTokenDisplay: string;
   currentTokenId: string | null;
   calledAt?: string;
+  servingStartedAt?: number | null;
   expectedDurationSec: number;
   servedToday: number;
   avgServiceTimeSec: number;
@@ -571,6 +572,7 @@ export function useAdminCounters(): AdminCountersData {
       currentTokenDisplay,
       currentTokenId: counter.currentTokenId,
       calledAt,
+      servingStartedAt: counter.servingStartedAt ?? null,
       expectedDurationSec,
       servedToday: counter.servedToday,
       avgServiceTimeSec,
