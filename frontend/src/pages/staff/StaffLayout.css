@@ -1,0 +1,18 @@
+.staff-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.staff-layout__status-bar {
+  display: flex;
+  align-items: center;
+  padding: var(--space-2) var(--space-6);
+  background: var(--color-bg-surface);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.staff-layout__content {
+  flex: 1;
+  overflow-y: auto;
+}

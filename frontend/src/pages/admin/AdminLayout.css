@@ -1,0 +1,17 @@
+.admin-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.admin-layout__body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.admin-layout__content {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-6);
+}
