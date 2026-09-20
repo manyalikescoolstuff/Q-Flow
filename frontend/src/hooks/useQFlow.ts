@@ -9,7 +9,7 @@
 
 import { useQFlowStore } from '@/mock/store';
 import type { Counter, Token, Queue, Service } from '@/models';
-import { formatDuration } from '@/utils/format';
+import { formatDuration, formatTimer } from '@/utils/format';
 
 /**
  * Get all data a staff member needs for their counter view.
@@ -496,5 +496,110 @@ export function useAdminQueues(): AdminQueuesData {
       highestWaitServiceName,
     },
     queues: queueRows,
+  };
+}
+
+export interface AdminCountersSummary {
+  totalCounters: number;
+  activeCounters: number;
+  pausedCounters: number;
+  avgUtilization: number;
+}
+
+export interface AdminCounterItem {
+  id: string;
+  label: string;
+  serviceId: string;
+  serviceName: string;
+  status: 'ACTIVE' | 'PAUSED';
+  staffName: string;
+  currentTokenDisplay: string;
+  currentTokenId: string | null;
+  calledAt?: string;
+  expectedDurationSec: number;
+  servedToday: number;
+  avgServiceTimeSec: number;
+  avgServiceTimeFormatted: string;
+  utilizationRate: number;
+  isPaused: boolean;
+}
+
+export interface AdminCountersData {
+  summary: AdminCountersSummary;
+  counters: AdminCounterItem[];
+}
+
+/**
+ * Get detailed real-time operational data for all physical service counters.
+ * Subscribes directly to the shared Zustand store.
+ */
+export function useAdminCounters(): AdminCountersData {
+  const services = useQFlowStore((s) => s.services);
+  const counters = useQFlowStore((s) => s.counters);
+  const tokens = useQFlowStore((s) => s.tokens);
+  const staff = useQFlowStore((s) => s.staff);
+
+  const counterList = Object.values(counters);
+
+  const counterItems: AdminCounterItem[] = counterList.map((counter) => {
+    const service = services[counter.serviceId];
+    const staffMember = counter.staffId ? staff[counter.staffId] : undefined;
+    const currentToken = counter.currentTokenId
+      ? tokens[counter.currentTokenId]
+      : undefined;
+
+    const currentTokenDisplay = currentToken ? currentToken.displayNumber : '—';
+    const calledAt = currentToken ? currentToken.calledAt : undefined;
+
+    const expectedDurationSec = service?.expectedDurationSec ?? 300;
+    const avgServiceTimeSec =
+      counter.avgServiceTimeSec > 0
+        ? counter.avgServiceTimeSec
+        : expectedDurationSec;
+    const avgServiceTimeFormatted = formatTimer(avgServiceTimeSec);
+
+    const utilizationRate =
+      counter.status === 'ACTIVE' ? (counter.utilizationRate ?? 75) : 0;
+
+    return {
+      id: counter.id,
+      label: counter.label,
+      serviceId: counter.serviceId,
+      serviceName: service?.name ?? 'Unassigned',
+      status: counter.status,
+      staffName: staffMember?.name ?? 'Unassigned',
+      currentTokenDisplay,
+      currentTokenId: counter.currentTokenId,
+      calledAt,
+      expectedDurationSec,
+      servedToday: counter.servedToday,
+      avgServiceTimeSec,
+      avgServiceTimeFormatted,
+      utilizationRate,
+      isPaused: counter.status === 'PAUSED',
+    };
+  });
+
+  const totalCounters = counterList.length;
+  const activeCounters = counterList.filter((c) => c.status === 'ACTIVE').length;
+  const pausedCounters = totalCounters - activeCounters;
+
+  const activeCountersList = counterItems.filter((c) => c.status === 'ACTIVE');
+  const avgUtilization =
+    activeCountersList.length > 0
+      ? Math.round(
+          activeCountersList.reduce((sum, c) => sum + c.utilizationRate, 0) /
+            activeCountersList.length,
+        )
+      : 0;
+
+  return {
+    summary: {
+      totalCounters,
+      activeCounters,
+      pausedCounters,
+      avgUtilization,
+    },
+    counters: counterItems,
   };
 }

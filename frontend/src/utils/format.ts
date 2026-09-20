@@ -20,6 +20,22 @@ export function formatDuration(totalSeconds: number): string {
 }
 
 /**
+ * Format elapsed seconds into mm:ss timer format.
+ * e.g. 222 → "03:42", 290 → "04:50", 560 → "09:20"
+ */
+export function formatTimer(totalSeconds: number): string {
+  if (totalSeconds < 0) return '—';
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = Math.floor(totalSeconds % 60);
+
+  if (hours > 0) {
+    return `${hours}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+  }
+  return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+}
+
+/**
  * Format a Date or ISO string to a short time display.
  * e.g. "09:34 AM"
  */

@@ -1,0 +1,302 @@
+/* ================================================================== */
+/*  Admin Counters — Physical Counter Monitoring Page                 */
+/* ================================================================== */
+
+.admin-counters {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  max-width: 1400px;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Page Header                                                       */
+/* ------------------------------------------------------------------ */
+
+.admin-counters__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.admin-counters__title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.admin-counters__title {
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-bold);
+  color: var(--color-text-primary);
+  letter-spacing: -0.01em;
+}
+
+.admin-counters__subtitle {
+  font-size: var(--fs-sm);
+  color: var(--color-text-secondary);
+}
+
+.admin-counters__live-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  background: rgba(46, 204, 113, 0.08);
+  border: 1px solid rgba(46, 204, 113, 0.25);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.06em;
+  color: var(--color-success);
+}
+
+.admin-counters__live-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-success);
+  box-shadow: 0 0 6px var(--color-success);
+}
+
+/* ------------------------------------------------------------------ */
+/*  Summary Metrics Grid                                              */
+/* ------------------------------------------------------------------ */
+
+.admin-counters__summary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-4);
+}
+
+.admin-counters .admin-metric-card {
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4) var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.admin-counters .admin-metric-card__label {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+}
+
+.admin-counters .admin-metric-card__value {
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xl);
+  font-weight: var(--fw-bold);
+  color: var(--color-text-primary);
+  line-height: var(--lh-tight);
+}
+
+.admin-counters .admin-metric-card__subtext {
+  font-size: var(--fs-xs);
+  color: var(--color-text-secondary);
+  margin-top: 2px;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Counters Table Section                                            */
+/* ------------------------------------------------------------------ */
+
+.admin-counters__section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.admin-counters__section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.admin-counters__section-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.admin-counters__section-title {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-secondary);
+}
+
+.admin-counters__section-count {
+  font-size: var(--fs-xs);
+  font-family: var(--font-mono);
+  color: var(--color-text-muted);
+  background: var(--color-bg-elevated);
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+}
+
+.admin-counters__table-wrapper {
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.admin-counters__table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: var(--fs-base);
+}
+
+.admin-counters__table th {
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+  background: var(--color-bg-elevated);
+  border-bottom: 1px solid var(--color-border);
+  white-space: nowrap;
+}
+
+.admin-counters__table td {
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+  vertical-align: middle;
+}
+
+.admin-counters__table tr:last-child td {
+  border-bottom: none;
+}
+
+.admin-counters__table tbody tr:hover td {
+  background: var(--color-bg-hover);
+}
+
+.admin-counters__tr--paused td {
+  opacity: 0.75;
+}
+
+.admin-counters__label {
+  font-family: var(--font-mono);
+  font-weight: var(--fw-bold);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+}
+
+.admin-counters__service {
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-primary);
+}
+
+.admin-counters__mono {
+  font-family: var(--font-mono);
+  font-weight: var(--fw-medium);
+}
+
+/* Status & Attention */
+
+.admin-counters__status-cell {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.admin-counters__attention-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 10px;
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+  background: rgba(240, 173, 78, 0.15);
+  border: 1px solid rgba(240, 173, 78, 0.35);
+  color: var(--color-warning);
+}
+
+/* Duration Timer */
+
+.admin-counters__duration {
+  font-family: var(--font-mono);
+  font-weight: var(--fw-bold);
+  color: var(--color-text-primary);
+}
+
+.admin-counters__duration--long {
+  color: var(--color-warning);
+}
+
+/* Utilization Progress Bar Cell */
+
+.admin-counters__util-cell {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.admin-counters__util-pct {
+  font-family: var(--font-mono);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-sm);
+  min-width: 36px;
+}
+
+.admin-counters__util-bar {
+  flex: 1;
+  max-width: 80px;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+}
+
+.admin-counters__util-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: var(--color-accent);
+  transition: width 0.3s ease;
+}
+
+.admin-counters__util-fill--high {
+  background: var(--color-success);
+}
+
+.admin-counters__util-fill--paused {
+  background: var(--color-border);
+}
+
+/* Staff subtext */
+.admin-counters__staff-sub {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+  margin-top: 2px;
+}
+
+/* Responsive */
+@media (max-width: 1100px) {
+  .admin-counters__summary {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-counters__summary {
+    grid-template-columns: 1fr;
+  }
+}

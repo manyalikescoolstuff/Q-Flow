@@ -20,4 +20,6 @@ export interface Counter {
   servedToday: number;
   /** Rolling average service time in seconds */
   avgServiceTimeSec: number;
+  /** Counter operational utilization rate percentage (0-100) */
+  utilizationRate?: number;
 }

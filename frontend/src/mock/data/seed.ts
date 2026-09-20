@@ -61,6 +61,10 @@ function makeIso(minutesOffset: number): string {
   return d.toISOString();
 }
 
+function makeRecentIso(secondsAgo: number): string {
+  return new Date(Date.now() - secondsAgo * 1000).toISOString();
+}
+
 export const SEED_TOKENS: Record<string, Token> = {
   // ---- Aadhaar queue ----
   'tok-000': {
@@ -99,7 +103,7 @@ export const SEED_TOKENS: Record<string, Token> = {
     queueId: 'q-aadhaar',
     status: 'SERVING',
     issuedAt: makeIso(10),
-    calledAt: makeIso(15),
+    calledAt: makeRecentIso(222), // 03:42 ago
     counterId: 'ctr-01',
   },
   'tok-004': {
@@ -131,7 +135,7 @@ export const SEED_TOKENS: Record<string, Token> = {
     queueId: 'q-pan',
     status: 'SERVING',
     issuedAt: makeIso(5),
-    calledAt: makeIso(10),
+    calledAt: makeRecentIso(105), // 01:45 ago
     counterId: 'ctr-02',
   },
   'tok-008': {
@@ -156,7 +160,7 @@ export const SEED_TOKENS: Record<string, Token> = {
     queueId: 'q-income',
     status: 'SERVING',
     issuedAt: makeIso(4),
-    calledAt: makeIso(9),
+    calledAt: makeRecentIso(260), // 04:20 ago
     counterId: 'ctr-03',
   },
   'tok-011': {
@@ -181,7 +185,7 @@ export const SEED_TOKENS: Record<string, Token> = {
     queueId: 'q-domicile',
     status: 'SERVING',
     issuedAt: makeIso(6),
-    calledAt: makeIso(11),
+    calledAt: makeRecentIso(90), // 01:30 ago
     counterId: 'ctr-04',
   },
   'tok-014': {
@@ -199,7 +203,7 @@ export const SEED_TOKENS: Record<string, Token> = {
     queueId: 'q-land',
     status: 'SERVING',
     issuedAt: makeIso(7),
-    calledAt: makeIso(12),
+    calledAt: makeRecentIso(560), // 09:20 ago (over 480s benchmark)
     counterId: 'ctr-05',
   },
   'tok-016': {
@@ -275,6 +279,7 @@ export const SEED_COUNTERS: Record<string, Counter> = {
     currentTokenId: 'tok-003',
     servedToday: 2,
     avgServiceTimeSec: 290,
+    utilizationRate: 82,
   },
   'ctr-02': {
     id: 'ctr-02',
@@ -286,6 +291,7 @@ export const SEED_COUNTERS: Record<string, Counter> = {
     currentTokenId: 'tok-007',
     servedToday: 4,
     avgServiceTimeSec: 230,
+    utilizationRate: 88,
   },
   'ctr-03': {
     id: 'ctr-03',
@@ -297,6 +303,7 @@ export const SEED_COUNTERS: Record<string, Counter> = {
     currentTokenId: 'tok-010',
     servedToday: 3,
     avgServiceTimeSec: 350,
+    utilizationRate: 76,
   },
   'ctr-04': {
     id: 'ctr-04',
@@ -308,6 +315,7 @@ export const SEED_COUNTERS: Record<string, Counter> = {
     currentTokenId: 'tok-013',
     servedToday: 1,
     avgServiceTimeSec: 400,
+    utilizationRate: 65,
   },
   'ctr-05': {
     id: 'ctr-05',
@@ -319,6 +327,7 @@ export const SEED_COUNTERS: Record<string, Counter> = {
     currentTokenId: 'tok-015',
     servedToday: 5,
     avgServiceTimeSec: 460,
+    utilizationRate: 92,
   },
   'ctr-06': {
     id: 'ctr-06',
@@ -330,6 +339,7 @@ export const SEED_COUNTERS: Record<string, Counter> = {
     currentTokenId: null,
     servedToday: 0,
     avgServiceTimeSec: 0,
+    utilizationRate: 0,
   },
 };
 
