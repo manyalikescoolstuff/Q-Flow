@@ -419,17 +419,15 @@ export function PredictionsPage() {
                 className={`admin-demand-row${item.isHighest ? ' admin-demand-row--highest' : ''}`}
               >
                 <div className="admin-demand-row__top">
-                  <span className="admin-demand-row__name">
+                  <span className="admin-demand-row__name" title={item.serviceName}>
                     {item.serviceName}
                   </span>
-                  <div className="admin-demand-row__stats">
-                    <span className="admin-demand-row__vol">
-                      {item.expectedRequests} Requests
-                    </span>
-                    <span className="admin-demand-row__pct">
-                      {item.percentage}%
-                    </span>
-                  </div>
+                  <span className="admin-demand-row__vol">
+                    {item.expectedRequests} Requests
+                  </span>
+                  <span className="admin-demand-row__pct">
+                    {item.percentage}%
+                  </span>
                 </div>
                 <div className="admin-demand-row__bar-track">
                   <div
