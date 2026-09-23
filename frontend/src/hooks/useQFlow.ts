@@ -985,4 +985,243 @@ export function useAdminAnalytics(): AdminAnalyticsData {
   };
 }
 
+/* ------------------------------------------------------------------ */
+/*  Admin Predictions Types & Hook                                    */
+/* ------------------------------------------------------------------ */
+
+export interface AdminPredictionHourlyItem {
+  hour: number;
+  label: string;
+  timeRange: string;
+  predictedFootfall: number;
+  predictedAvgWaitSec: number;
+  predictedAvgWaitFormatted: string;
+  isPeakFootfall: boolean;
+  isPeakWait: boolean;
+}
+
+export interface AdminPredictionServiceDemandItem {
+  serviceId: string;
+  serviceName: string;
+  expectedRequests: number;
+  percentage: number;
+  isHighest: boolean;
+}
+
+export interface AdminPredictionQueuePressureItem {
+  serviceId: string;
+  serviceName: string;
+  expectedRequests: number;
+  expectedAvgWaitSec: number;
+  expectedAvgWaitFormatted: string;
+  expectedServiceSec: number;
+  expectedServiceFormatted: string;
+  availableCounters: number;
+  forecastLoadStatus: 'NORMAL' | 'BUSY' | 'HIGH LOAD';
+  statusTone: 'success' | 'warning' | 'danger';
+}
+
+export interface AdminPredictionInsights {
+  expectedPeakWindow: {
+    timeWindow: string;
+    expectedCount: number;
+    description: string;
+  };
+  highestDemandService: {
+    serviceName: string;
+    expectedRequests: number;
+    percentage: number;
+    description: string;
+  };
+  highestExpectedWait: {
+    serviceName: string;
+    expectedWaitFormatted: string;
+    expectedWaitSec: number;
+    description: string;
+  };
+  capacityPressure: {
+    serviceName: string;
+    criticalWindow: string;
+    description: string;
+  };
+}
+
+export interface AdminPredictionsData {
+  summary: {
+    forecastPeriod: string;
+    predictedFootfall: number;
+    expectedPeakPeriod: string;
+    highestDemandServiceName: string;
+    highestDemandRequests: number;
+    highestExpectedWaitFormatted: string;
+    highestExpectedWaitServiceName: string;
+  };
+  hourlyForecast: AdminPredictionHourlyItem[];
+  peakFootfallHour: AdminPredictionHourlyItem | null;
+  peakWaitHour: AdminPredictionHourlyItem | null;
+  serviceDemandForecast: AdminPredictionServiceDemandItem[];
+  queuePressure: AdminPredictionQueuePressureItem[];
+  planningInsights: AdminPredictionInsights;
+}
+
+/**
+ * Get centralized deterministic forecast data for the Admin Predictions page (/admin/predictions).
+ * Provides demand projections, expected waiting times, queue pressure, and decision-support planning insights.
+ */
+export function useAdminPredictions(): AdminPredictionsData {
+  const predictions = useQFlowStore((s) => s.predictions);
+  const services = useQFlowStore((s) => s.services);
+  const serviceList = Object.values(services);
+  const forecastMap = predictions.serviceForecasts ?? {};
+
+  // 1. Hourly Forecast Telemetry
+  const rawHourly = predictions.hourlyForecast && predictions.hourlyForecast.length > 0
+    ? predictions.hourlyForecast
+    : [
+        { hour: 9,  label: '09:00', timeRange: '09:00 – 10:00', predictedFootfall: 13, predictedAvgWaitSec: 320 },
+        { hour: 10, label: '10:00', timeRange: '10:00 – 11:00', predictedFootfall: 20, predictedAvgWaitSec: 510 },
+        { hour: 11, label: '11:00', timeRange: '11:00 – 12:00', predictedFootfall: 24, predictedAvgWaitSec: 660 },
+        { hour: 12, label: '12:00', timeRange: '12:00 – 13:00', predictedFootfall: 16, predictedAvgWaitSec: 580 },
+        { hour: 13, label: '13:00', timeRange: '13:00 – 14:00', predictedFootfall: 9,  predictedAvgWaitSec: 390 },
+        { hour: 14, label: '14:00', timeRange: '14:00 – 15:00', predictedFootfall: 7,  predictedAvgWaitSec: 310 },
+        { hour: 15, label: '15:00', timeRange: '15:00 – 16:00', predictedFootfall: 4,  predictedAvgWaitSec: 250 },
+        { hour: 16, label: '16:00', timeRange: '16:00 – 17:00', predictedFootfall: 3,  predictedAvgWaitSec: 190 },
+      ];
+
+  const maxFootfall = Math.max(...rawHourly.map((h) => h.predictedFootfall), 0);
+  const maxWait = Math.max(...rawHourly.map((h) => h.predictedAvgWaitSec), 0);
+
+  const hourlyForecast: AdminPredictionHourlyItem[] = rawHourly.map((h) => ({
+    hour: h.hour,
+    label: h.label,
+    timeRange: h.timeRange,
+    predictedFootfall: h.predictedFootfall,
+    predictedAvgWaitSec: h.predictedAvgWaitSec,
+    predictedAvgWaitFormatted: formatDuration(h.predictedAvgWaitSec),
+    isPeakFootfall: h.predictedFootfall === maxFootfall && maxFootfall > 0,
+    isPeakWait: h.predictedAvgWaitSec === maxWait && maxWait > 0,
+  }));
+
+  const peakFootfallHour = hourlyForecast.find((h) => h.isPeakFootfall) ?? hourlyForecast[2] ?? null;
+  const peakWaitHour = hourlyForecast.find((h) => h.isPeakWait) ?? hourlyForecast[2] ?? null;
+
+  // 2. Expected Queue Pressure & Service Forecasts
+  const queuePressure: AdminPredictionQueuePressureItem[] = serviceList.map(
+    (service) => {
+      const forecast = forecastMap[service.id];
+      const expectedRequests = forecast?.expectedRequests ?? 15;
+      const expectedAvgWaitSec = forecast?.expectedAvgWaitSec ?? 360;
+      const expectedServiceSec = forecast?.expectedServiceSec ?? service.expectedDurationSec;
+      const availableCounters = forecast?.availableCounters ?? 1;
+      const forecastLoadStatus = forecast?.forecastLoadStatus ?? 'NORMAL';
+
+      let statusTone: 'success' | 'warning' | 'danger' = 'success';
+      if (forecastLoadStatus === 'HIGH LOAD') {
+        statusTone = 'danger';
+      } else if (forecastLoadStatus === 'BUSY') {
+        statusTone = 'warning';
+      }
+
+      return {
+        serviceId: service.id,
+        serviceName: service.name,
+        expectedRequests,
+        expectedAvgWaitSec,
+        expectedAvgWaitFormatted: formatDuration(expectedAvgWaitSec),
+        expectedServiceSec,
+        expectedServiceFormatted: formatDuration(expectedServiceSec),
+        availableCounters,
+        forecastLoadStatus,
+        statusTone,
+      };
+    },
+  );
+
+  // 3. Expected Service Demand Breakdown
+  const totalExpectedRequests = queuePressure.reduce(
+    (sum, s) => sum + s.expectedRequests,
+    0,
+  );
+  const maxRequests = Math.max(...queuePressure.map((s) => s.expectedRequests), 0);
+
+  const serviceDemandForecast: AdminPredictionServiceDemandItem[] = queuePressure
+    .map((item) => {
+      const percentage =
+        totalExpectedRequests > 0
+          ? Math.round((item.expectedRequests / totalExpectedRequests) * 1000) / 10
+          : 0;
+
+      return {
+        serviceId: item.serviceId,
+        serviceName: item.serviceName,
+        expectedRequests: item.expectedRequests,
+        percentage,
+        isHighest: item.expectedRequests === maxRequests && maxRequests > 0,
+      };
+    })
+    .sort((a, b) => b.expectedRequests - a.expectedRequests);
+
+  // 4. Decision-Support Planning Insights (Calculated deterministically)
+  const highestDemandService = serviceDemandForecast[0];
+  const highestWaitService = [...queuePressure].sort(
+    (a, b) => b.expectedAvgWaitSec - a.expectedAvgWaitSec,
+  )[0];
+
+  const highLoadServices = queuePressure.filter(
+    (s) => s.forecastLoadStatus === 'HIGH LOAD' || s.forecastLoadStatus === 'BUSY',
+  );
+
+  const totalPredictedFootfall = predictions.predictedFootfallToday || totalExpectedRequests;
+  const peakPct =
+    peakFootfallHour && totalPredictedFootfall > 0
+      ? Math.round((peakFootfallHour.predictedFootfall / totalPredictedFootfall) * 1000) / 10
+      : 25.0;
+
+  const planningInsights: AdminPredictionInsights = {
+    expectedPeakWindow: {
+      timeWindow: peakFootfallHour ? peakFootfallHour.timeRange : '11:00 – 12:00',
+      expectedCount: peakFootfallHour ? peakFootfallHour.predictedFootfall : 24,
+      description: `Visitor arrivals are projected to peak at ${peakFootfallHour?.timeRange ?? '11:00 – 12:00'} (~${peakFootfallHour?.predictedFootfall ?? 24} visitors expected, ${peakPct}% of daily volume).`,
+    },
+    highestDemandService: {
+      serviceName: highestDemandService ? highestDemandService.serviceName : 'Aadhaar Update',
+      expectedRequests: highestDemandService ? highestDemandService.expectedRequests : 33,
+      percentage: highestDemandService ? highestDemandService.percentage : 34.4,
+      description: `${highestDemandService?.serviceName ?? 'Aadhaar Update'} is projected to receive the highest volume (${highestDemandService?.expectedRequests ?? 33} expected requests, ${highestDemandService?.percentage ?? 34.4}% of total demand).`,
+    },
+    highestExpectedWait: {
+      serviceName: highestWaitService ? highestWaitService.serviceName : 'Land Records',
+      expectedWaitFormatted: highestWaitService ? highestWaitService.expectedAvgWaitFormatted : '11m 30s',
+      expectedWaitSec: highestWaitService ? highestWaitService.expectedAvgWaitSec : 690,
+      description: `${highestWaitService?.serviceName ?? 'Land Records'} is projected to experience the highest queue latency with average wait times reaching ${highestWaitService?.expectedAvgWaitFormatted ?? '11m 30s'}.`,
+    },
+    capacityPressure: {
+      serviceName: highLoadServices.map((s) => s.serviceName).join(' & ') || 'Land Records',
+      criticalWindow: '11:00 – 13:00',
+      description: `${highLoadServices.map((s) => s.serviceName).join(' and ') || 'Land Records'} is projected to operate near peak queue capacity during the 11:00–13:00 window based on single-counter assignments.`,
+    },
+  };
+
+  const summary = {
+    forecastPeriod: predictions.forecastPeriod || '09:00 – 17:00',
+    predictedFootfall: totalPredictedFootfall,
+    expectedPeakPeriod: peakFootfallHour ? peakFootfallHour.timeRange : '11:00 – 12:00',
+    highestDemandServiceName: highestDemandService ? highestDemandService.serviceName : 'Aadhaar Update',
+    highestDemandRequests: highestDemandService ? highestDemandService.expectedRequests : 33,
+    highestExpectedWaitFormatted: highestWaitService ? highestWaitService.expectedAvgWaitFormatted : '11m 30s',
+    highestExpectedWaitServiceName: highestWaitService ? highestWaitService.serviceName : 'Land Records',
+  };
+
+  return {
+    summary,
+    hourlyForecast,
+    peakFootfallHour,
+    peakWaitHour,
+    serviceDemandForecast,
+    queuePressure,
+    planningInsights,
+  };
+}
+
+
 

@@ -463,25 +463,92 @@ export const SEED_ANALYTICS: AnalyticsSnapshot = {
 };
 
 /* ------------------------------------------------------------------ */
-/*  PREDICTIONS (future-looking)                                      */
+/*  PREDICTIONS (future-looking prototype forecast)                   */
+/*                                                                    */
+/*  NOTE ON PROTOTYPE FORECASTING:                                    */
+/*  For the V1 prototype, forecast values are derived from            */
+/*  centralized deterministic baseline models reflecting typical       */
+/*  next-period operational patterns without live ML models.          */
 /* ------------------------------------------------------------------ */
 export const SEED_PREDICTIONS: PredictionSnapshot = {
-  predictedFootfallToday: 110,
+  forecastPeriod: '09:00 – 17:00',
+  predictedFootfallToday: 96,
+  totalExpectedRequests: 96,
+  expectedPeakHour: 11,
+  expectedAvgWaitSec: 435,
+  hourlyForecast: [
+    { hour: 9,  label: '09:00', timeRange: '09:00 – 10:00', predictedFootfall: 13, predictedAvgWaitSec: 320 },
+    { hour: 10, label: '10:00', timeRange: '10:00 – 11:00', predictedFootfall: 20, predictedAvgWaitSec: 510 },
+    { hour: 11, label: '11:00', timeRange: '11:00 – 12:00', predictedFootfall: 24, predictedAvgWaitSec: 660 },
+    { hour: 12, label: '12:00', timeRange: '12:00 – 13:00', predictedFootfall: 16, predictedAvgWaitSec: 580 },
+    { hour: 13, label: '13:00', timeRange: '13:00 – 14:00', predictedFootfall: 9,  predictedAvgWaitSec: 390 },
+    { hour: 14, label: '14:00', timeRange: '14:00 – 15:00', predictedFootfall: 7,  predictedAvgWaitSec: 310 },
+    { hour: 15, label: '15:00', timeRange: '15:00 – 16:00', predictedFootfall: 4,  predictedAvgWaitSec: 250 },
+    { hour: 16, label: '16:00', timeRange: '16:00 – 17:00', predictedFootfall: 3,  predictedAvgWaitSec: 190 },
+  ],
+  serviceForecasts: {
+    'svc-aadhaar': {
+      serviceId: 'svc-aadhaar',
+      serviceName: 'Aadhaar Update',
+      expectedRequests: 33,
+      expectedAvgWaitSec: 420,
+      expectedServiceSec: 300,
+      availableCounters: 2,
+      forecastLoadStatus: 'BUSY',
+    },
+    'svc-pan': {
+      serviceId: 'svc-pan',
+      serviceName: 'PAN Card',
+      expectedRequests: 23,
+      expectedAvgWaitSec: 310,
+      expectedServiceSec: 240,
+      availableCounters: 1,
+      forecastLoadStatus: 'NORMAL',
+    },
+    'svc-income': {
+      serviceId: 'svc-income',
+      serviceName: 'Income Certificate',
+      expectedRequests: 15,
+      expectedAvgWaitSec: 460,
+      expectedServiceSec: 360,
+      availableCounters: 1,
+      forecastLoadStatus: 'BUSY',
+    },
+    'svc-domicile': {
+      serviceId: 'svc-domicile',
+      serviceName: 'Domicile Certificate',
+      expectedRequests: 9,
+      expectedAvgWaitSec: 380,
+      expectedServiceSec: 420,
+      availableCounters: 1,
+      forecastLoadStatus: 'NORMAL',
+    },
+    'svc-land': {
+      serviceId: 'svc-land',
+      serviceName: 'Land Records',
+      expectedRequests: 16,
+      expectedAvgWaitSec: 690,
+      expectedServiceSec: 480,
+      availableCounters: 1,
+      forecastLoadStatus: 'HIGH LOAD',
+    },
+  },
   predictedHourlyFootfall: [
     0, 0, 0, 0, 0, 0, 0, 0,
-    5, 14, 20, 25, 18, 12, 9, 5,
-    2, 0, 0, 0, 0, 0, 0, 0,
+    13, 20, 24, 16, 9, 7, 4, 3,
+    0, 0, 0, 0, 0, 0, 0, 0,
   ],
   predictedAvgWaitSec: [
     0, 0, 0, 0, 0, 0, 0, 0,
-    200, 340, 520, 660, 580, 400, 320, 260,
-    180, 0, 0, 0, 0, 0, 0, 0,
+    320, 510, 660, 580, 390, 310, 250, 190,
+    0, 0, 0, 0, 0, 0, 0, 0,
   ],
   predictedQueueLoad: {
-    'svc-aadhaar': 5,
-    'svc-pan': 3,
-    'svc-income': 4,
-    'svc-domicile': 2,
-    'svc-land': 6,
+    'svc-aadhaar': 4,
+    'svc-pan': 2,
+    'svc-income': 3,
+    'svc-domicile': 1,
+    'svc-land': 5,
   },
 };
+

@@ -8,5 +8,10 @@ export type {
   HourlyOperationalMetric,
   ServicePerformanceRecord,
 } from './analytics';
-export type { PredictionSnapshot } from './prediction';
+export type {
+  PredictionSnapshot,
+  HourlyForecastPoint,
+  ServiceDemandForecast,
+} from './prediction';
+
 
