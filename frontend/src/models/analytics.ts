@@ -36,10 +36,20 @@ export interface ServicePerformanceRecord {
 /**
  * Aggregated analytics / KPI data for the service centre.
  * Represents historical / current-day operational metrics with strict lifecycle distinction.
+ *
+ * NOTE ON V1 PROTOTYPE DATA-MODEL ASSUMPTION:
+ * For the V1 frontend prototype, we assume:
+ *   1 registered visitor = 1 service request/token
+ * This is why Total Visitors Today (87) currently equals total Service Demand / Tokens Issued (87).
+ * Later, physical footfall from IR sensors and actual token kiosk generations will be tracked as separate metrics.
+ *
+ * Current lifecycle relationship preserved across centralized data:
+ *   87 requests = 65 completed + 11 waiting + 6 missed + 5 currently serving
  */
 export interface AnalyticsSnapshot {
   /** Total visitors registered/entered the centre today */
   totalFootfallToday: number;
+
   /** Total service tokens generated today across all services */
   totalTokensIssued: number;
   /** Total customers successfully served / completed today */

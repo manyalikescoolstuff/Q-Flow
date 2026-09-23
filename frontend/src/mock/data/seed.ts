@@ -366,9 +366,21 @@ export const SEED_STAFF: Record<string, Staff> = {
 
 /* ------------------------------------------------------------------ */
 /*  ANALYTICS (historical / current-day)                              */
+/*                                                                    */
+/*  NOTE ON V1 PROTOTYPE DATA-MODEL ASSUMPTION:                       */
+/*  For the V1 frontend prototype, we assume:                         */
+/*    1 registered visitor = 1 service request/token                  */
+/*  This is why Total Visitors Today (87) currently equals total      */
+/*  Service Demand (87 tokens issued).                                */
+/*  Later, physical footfall from IR sensors and actual token         */
+/*  generations will be stored and tracked as separate metrics.       */
+/*                                                                    */
+/*  Lifecycle balance preserved:                                      */
+/*    87 requests = 65 completed + 11 waiting + 6 missed + 5 serving  */
 /* ------------------------------------------------------------------ */
 export const SEED_ANALYTICS: AnalyticsSnapshot = {
   totalFootfallToday: 87,
+
   totalTokensIssued: 87,
   totalServedToday: 65,
   totalWaitingToday: 11,

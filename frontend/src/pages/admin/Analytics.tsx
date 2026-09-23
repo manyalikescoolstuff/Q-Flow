@@ -133,7 +133,7 @@ export function AnalyticsPage() {
             {summary.avgCounterUtilization}%
           </span>
           <span className="admin-metric-card__subtext">
-            {summary.activeCountersCount} of {summary.totalCountersCount} active desks (paused at 0%)
+            Average across {summary.activeCountersCount} active counters
           </span>
         </div>
       </section>
