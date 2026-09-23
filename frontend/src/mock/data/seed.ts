@@ -369,20 +369,72 @@ export const SEED_STAFF: Record<string, Staff> = {
 /* ------------------------------------------------------------------ */
 export const SEED_ANALYTICS: AnalyticsSnapshot = {
   totalFootfallToday: 87,
-  totalServedToday: 15,
+  totalServedToday: 87,
   avgWaitTimeSec: 420,
   avgServiceTimeSec: 310,
   peakHour: 11,
   hourlyFootfall: [
     0, 0, 0, 0, 0, 0, 0, 0,    // 00–07
-    3, 12, 18, 22, 14, 8, 6, 4, // 08–15
-    0, 0, 0, 0, 0, 0, 0, 0,    // 16–23
+    0, 12, 18, 22, 14, 8, 6, 4, // 08–15 (09:00 - 16:00)
+    3, 0, 0, 0, 0, 0, 0, 0,    // 16–23 (16:00 - 17:00 is 3)
   ],
   hourlyAvgWaitSec: [
     0, 0, 0, 0, 0, 0, 0, 0,
-    180, 300, 480, 600, 540, 360, 300, 240,
-    0, 0, 0, 0, 0, 0, 0, 0,
+    0, 300, 480, 600, 540, 360, 300, 240,
+    180, 0, 0, 0, 0, 0, 0, 0,
   ],
+  operatingHours: [
+    { hour: 9,  label: '09:00', footfall: 12, avgWaitSec: 300 },
+    { hour: 10, label: '10:00', footfall: 18, avgWaitSec: 480 },
+    { hour: 11, label: '11:00', footfall: 22, avgWaitSec: 600 },
+    { hour: 12, label: '12:00', footfall: 14, avgWaitSec: 540 },
+    { hour: 13, label: '13:00', footfall: 8,  avgWaitSec: 360 },
+    { hour: 14, label: '14:00', footfall: 6,  avgWaitSec: 300 },
+    { hour: 15, label: '15:00', footfall: 4,  avgWaitSec: 240 },
+    { hour: 16, label: '16:00', footfall: 3,  avgWaitSec: 180 },
+  ],
+  servicePerformance: {
+    'svc-aadhaar': {
+      serviceId: 'svc-aadhaar',
+      serviceName: 'Aadhaar Update',
+      customersServed: 32,
+      avgWaitTimeSec: 420,
+      avgServiceTimeSec: 295,
+      missedTokens: 2,
+    },
+    'svc-pan': {
+      serviceId: 'svc-pan',
+      serviceName: 'PAN Card',
+      customersServed: 21,
+      avgWaitTimeSec: 310,
+      avgServiceTimeSec: 235,
+      missedTokens: 1,
+    },
+    'svc-income': {
+      serviceId: 'svc-income',
+      serviceName: 'Income Certificate',
+      customersServed: 14,
+      avgWaitTimeSec: 450,
+      avgServiceTimeSec: 355,
+      missedTokens: 1,
+    },
+    'svc-domicile': {
+      serviceId: 'svc-domicile',
+      serviceName: 'Domicile Certificate',
+      customersServed: 8,
+      avgWaitTimeSec: 390,
+      avgServiceTimeSec: 410,
+      missedTokens: 0,
+    },
+    'svc-land': {
+      serviceId: 'svc-land',
+      serviceName: 'Land Records',
+      customersServed: 12,
+      avgWaitTimeSec: 580,
+      avgServiceTimeSec: 475,
+      missedTokens: 2,
+    },
+  },
 };
 
 /* ------------------------------------------------------------------ */

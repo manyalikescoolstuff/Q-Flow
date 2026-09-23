@@ -1,0 +1,738 @@
+/* ================================================================== */
+/*  Admin Analytics — Historical Operational Patterns & Bottlenecks   */
+/* ================================================================== */
+
+.admin-analytics {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  max-width: 1400px;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Page Header                                                       */
+/* ------------------------------------------------------------------ */
+
+.admin-analytics__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.admin-analytics__title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.admin-analytics__title {
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-bold);
+  color: var(--color-text-primary);
+  letter-spacing: -0.01em;
+}
+
+.admin-analytics__subtitle {
+  font-size: var(--fs-sm);
+  color: var(--color-text-secondary);
+}
+
+.admin-analytics__badge-group {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.admin-analytics__historical-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  background: rgba(79, 140, 255, 0.08);
+  border: 1px solid rgba(79, 140, 255, 0.25);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.06em;
+  color: var(--color-accent);
+}
+
+.admin-analytics__period-pill {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+}
+
+/* ------------------------------------------------------------------ */
+/*  1. Top KPI Summary Grid                                           */
+/* ------------------------------------------------------------------ */
+
+.admin-analytics__kpis {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-4);
+}
+
+.admin-analytics .admin-metric-card {
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4) var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.admin-analytics .admin-metric-card__label {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+}
+
+.admin-analytics .admin-metric-card__value {
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xl);
+  font-weight: var(--fw-bold);
+  color: var(--color-text-primary);
+  line-height: var(--lh-tight);
+}
+
+.admin-analytics .admin-metric-card__subtext {
+  font-size: var(--fs-xs);
+  color: var(--color-text-secondary);
+  margin-top: 2px;
+}
+
+/* ------------------------------------------------------------------ */
+/*  2. Deterministic Insights Strip                                   */
+/* ------------------------------------------------------------------ */
+
+.admin-analytics__insights-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.admin-analytics__insights-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.admin-analytics__insights-title {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-secondary);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.admin-analytics__insights-tag {
+  font-size: 10px;
+  font-weight: var(--fw-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+}
+
+.admin-analytics__insights-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-4);
+}
+
+.admin-insight-card {
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  position: relative;
+  overflow: hidden;
+}
+
+.admin-insight-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--color-border-light);
+}
+
+.admin-insight-card--peak::before {
+  background: var(--color-accent);
+}
+
+.admin-insight-card--demand::before {
+  background: var(--color-success);
+}
+
+.admin-insight-card--bottleneck::before {
+  background: var(--color-danger);
+}
+
+.admin-insight-card--util::before {
+  background: var(--color-warning);
+}
+
+.admin-insight-card__type {
+  font-size: 11px;
+  font-weight: var(--fw-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+}
+
+.admin-insight-card__highlight {
+  font-family: var(--font-mono);
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-bold);
+  color: var(--color-text-primary);
+  margin-top: 2px;
+}
+
+.admin-insight-card__desc {
+  font-size: var(--fs-xs);
+  color: var(--color-text-secondary);
+  line-height: 1.4;
+  margin-top: 2px;
+}
+
+/* ------------------------------------------------------------------ */
+/*  3. Charts Grid (Hourly Footfall & Waiting Time Trend)             */
+/* ------------------------------------------------------------------ */
+
+.admin-analytics__charts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-6);
+}
+
+.admin-chart-card {
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.admin-chart-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.admin-chart-card__title-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.admin-chart-card__title {
+  font-size: var(--fs-base);
+  font-weight: var(--fw-bold);
+  color: var(--color-text-primary);
+}
+
+.admin-chart-card__subtitle {
+  font-size: var(--fs-xs);
+  color: var(--color-text-secondary);
+}
+
+.admin-chart-card__badge {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  background: rgba(79, 140, 255, 0.1);
+  border: 1px solid rgba(79, 140, 255, 0.25);
+  color: var(--color-accent);
+  white-space: nowrap;
+}
+
+.admin-chart-card__badge--warning {
+  background: rgba(240, 173, 78, 0.1);
+  border-color: rgba(240, 173, 78, 0.25);
+  color: var(--color-warning);
+}
+
+/* Custom SVG / CSS Chart Canvases */
+
+.admin-chart-container {
+  width: 100%;
+  height: 200px;
+  position: relative;
+}
+
+.admin-chart-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* Footfall Bar Chart */
+
+.admin-bar-chart {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 8px;
+  height: 180px;
+  padding: 24px 0 0 0;
+  border-bottom: 1px solid var(--color-border);
+  position: relative;
+}
+
+.admin-bar-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  justify-content: flex-end;
+  gap: 6px;
+  position: relative;
+}
+
+.admin-bar-col__value {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-secondary);
+  transition: color 0.15s;
+}
+
+.admin-bar-col--peak .admin-bar-col__value {
+  color: var(--color-accent);
+  font-weight: var(--fw-bold);
+}
+
+.admin-bar-col__track {
+  width: 100%;
+  max-width: 36px;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+}
+
+.admin-bar-col__fill {
+  width: 100%;
+  background: #232a38;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  border-top: 2px solid #3d4f6c;
+  transition: height 0.3s ease, background-color 0.15s;
+}
+
+.admin-bar-col:hover .admin-bar-col__fill {
+  background: #334460;
+  border-top-color: #5572a5;
+}
+
+.admin-bar-col--peak .admin-bar-col__fill {
+  background: rgba(79, 140, 255, 0.35);
+  border-top: 2px solid var(--color-accent);
+  box-shadow: 0 0 12px rgba(79, 140, 255, 0.2);
+}
+
+.admin-bar-col--peak:hover .admin-bar-col__fill {
+  background: rgba(79, 140, 255, 0.45);
+  border-top-color: var(--color-accent-hover);
+}
+
+.admin-bar-col__peak-pill {
+  position: absolute;
+  top: -24px;
+  font-size: 9px;
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  background: rgba(79, 140, 255, 0.15);
+  border: 1px solid rgba(79, 140, 255, 0.3);
+  padding: 1px 5px;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+}
+
+.admin-bar-labels {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: var(--space-2);
+}
+
+.admin-bar-labels__item {
+  flex: 1;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+
+.admin-bar-labels__item--peak {
+  color: var(--color-accent);
+  font-weight: var(--fw-bold);
+}
+
+/* ------------------------------------------------------------------ */
+/*  4. Service Demand & Counter Utilization Section                   */
+/* ------------------------------------------------------------------ */
+
+.admin-analytics__split-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-6);
+}
+
+.admin-analytics__card-section {
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.admin-analytics__card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.admin-analytics__card-title {
+  font-size: var(--fs-base);
+  font-weight: var(--fw-bold);
+  color: var(--color-text-primary);
+}
+
+.admin-analytics__card-count {
+  font-size: var(--fs-xs);
+  font-family: var(--font-mono);
+  color: var(--color-text-muted);
+  background: var(--color-bg-elevated);
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+}
+
+/* Service Demand List */
+
+.admin-demand-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.admin-demand-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: var(--space-3);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  transition: border-color 0.15s;
+}
+
+.admin-demand-row:hover {
+  border-color: var(--color-border-light);
+}
+
+.admin-demand-row--highest {
+  border-color: rgba(79, 140, 255, 0.3);
+  background: rgba(79, 140, 255, 0.03);
+}
+
+.admin-demand-row__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.admin-demand-row__name {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-primary);
+}
+
+.admin-demand-row__stats {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-family: var(--font-mono);
+}
+
+.admin-demand-row__vol {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  color: var(--color-text-primary);
+}
+
+.admin-demand-row__pct {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+.admin-demand-row__bar-track {
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+}
+
+.admin-demand-row__bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: #3c5478;
+  transition: width 0.3s ease;
+}
+
+.admin-demand-row--highest .admin-demand-row__bar-fill {
+  background: var(--color-accent);
+}
+
+/* Counter Utilization Telemetry List */
+
+.admin-util-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.admin-util-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-3);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  transition: border-color 0.15s;
+}
+
+.admin-util-row:hover {
+  border-color: var(--color-border-light);
+}
+
+.admin-util-row--paused {
+  opacity: 0.65;
+}
+
+.admin-util-row__info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 140px;
+}
+
+.admin-util-row__label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  color: var(--color-text-primary);
+}
+
+.admin-util-row__sub {
+  font-size: var(--fs-xs);
+  color: var(--color-text-muted);
+}
+
+.admin-util-row__metrics {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  justify-content: flex-end;
+}
+
+.admin-util-row__pct {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  min-width: 42px;
+  text-align: right;
+  color: var(--color-text-primary);
+}
+
+.admin-util-row__bar-track {
+  width: 120px;
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+}
+
+.admin-util-row__bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: var(--color-accent);
+  transition: width 0.3s ease;
+}
+
+.admin-util-row__bar-fill--high {
+  background: var(--color-success);
+}
+
+.admin-util-row__bar-fill--paused {
+  background: var(--color-border);
+}
+
+/* ------------------------------------------------------------------ */
+/*  5. Service Performance Matrix Table                               */
+/* ------------------------------------------------------------------ */
+
+.admin-analytics__table-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.admin-analytics__table-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.admin-analytics__table-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.admin-analytics__table-title {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-secondary);
+}
+
+.admin-analytics__table-wrapper {
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.admin-analytics__table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: var(--fs-base);
+}
+
+.admin-analytics__table th {
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+  background: var(--color-bg-elevated);
+  border-bottom: 1px solid var(--color-border);
+  white-space: nowrap;
+}
+
+.admin-analytics__table td {
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+  vertical-align: middle;
+}
+
+.admin-analytics__table tr:last-child td {
+  border-bottom: none;
+}
+
+.admin-analytics__table tbody tr:hover td {
+  background: var(--color-bg-hover);
+}
+
+.admin-analytics__service-name {
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-primary);
+}
+
+.admin-analytics__mono {
+  font-family: var(--font-mono);
+  font-weight: var(--fw-medium);
+}
+
+/* Status Tone Badges */
+
+.admin-status-badge--success {
+  background: rgba(46, 204, 113, 0.12);
+  color: var(--color-success);
+  border: 1px solid rgba(46, 204, 113, 0.3);
+}
+
+.admin-status-badge--warning {
+  background: rgba(240, 173, 78, 0.12);
+  color: var(--color-warning);
+  border: 1px solid rgba(240, 173, 78, 0.3);
+}
+
+.admin-status-badge--danger {
+  background: rgba(231, 76, 60, 0.12);
+  color: var(--color-danger);
+  border: 1px solid rgba(231, 76, 60, 0.3);
+}
+
+/* ------------------------------------------------------------------ */
+/*  Responsive Adjustments                                            */
+/* ------------------------------------------------------------------ */
+
+@media (max-width: 1200px) {
+  .admin-analytics__kpis {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .admin-analytics__insights-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .admin-analytics__charts-grid {
+    grid-template-columns: 1fr;
+  }
+  .admin-analytics__split-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-analytics__kpis {
+    grid-template-columns: 1fr;
+  }
+  .admin-analytics__insights-grid {
+    grid-template-columns: 1fr;
+  }
+}
