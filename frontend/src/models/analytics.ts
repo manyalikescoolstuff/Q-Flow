@@ -14,28 +14,43 @@ export interface HourlyOperationalMetric {
 
 /**
  * Historical service performance and volume metrics.
+ * Separates demand (tokens generated) from successfully completed/served, waiting, and missed tokens.
  */
 export interface ServicePerformanceRecord {
   serviceId: string;
   serviceName: string;
+  /** Total service requests / tokens generated for this service (Demand) */
+  tokensGenerated: number;
+  /** Tokens successfully completed and served */
   customersServed: number;
+  /** Tokens currently waiting in queue */
+  currentlyWaiting: number;
+  /** Average wait time of completed tokens in seconds */
   avgWaitTimeSec: number;
+  /** Average handling / service time of completed tokens in seconds */
   avgServiceTimeSec: number;
+  /** Missed / no-show tokens */
   missedTokens: number;
 }
 
 /**
  * Aggregated analytics / KPI data for the service centre.
- * Represents historical / current-day operational metrics.
+ * Represents historical / current-day operational metrics with strict lifecycle distinction.
  */
 export interface AnalyticsSnapshot {
-  /** Total footfall today */
+  /** Total visitors registered/entered the centre today */
   totalFootfallToday: number;
-  /** Total customers served today across all counters */
+  /** Total service tokens generated today across all services */
+  totalTokensIssued: number;
+  /** Total customers successfully served / completed today */
   totalServedToday: number;
-  /** Average waiting time in seconds (across all served tokens today) */
+  /** Total tokens currently waiting across all queues */
+  totalWaitingToday: number;
+  /** Total missed tokens today */
+  totalMissedToday: number;
+  /** Weighted average waiting time in seconds (across all completed tokens today) */
   avgWaitTimeSec: number;
-  /** Average service time in seconds (across all served tokens today) */
+  /** Weighted average service handling time in seconds (across all completed tokens today) */
   avgServiceTimeSec: number;
   /** Peak hour of the day (0-23) based on historical data */
   peakHour: number;
@@ -48,4 +63,5 @@ export interface AnalyticsSnapshot {
   /** Historical per-service performance breakdown */
   servicePerformance: Record<string, ServicePerformanceRecord>;
 }
+
 

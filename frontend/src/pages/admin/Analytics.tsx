@@ -100,7 +100,7 @@ export function AnalyticsPage() {
             {summary.totalVisitorsToday}
           </span>
           <span className="admin-metric-card__subtext">
-            Aggregated footfall across all queues
+            Aggregated arrivals across operational hours
           </span>
         </div>
 
@@ -111,7 +111,7 @@ export function AnalyticsPage() {
             {summary.avgWaitTimeFormatted}
           </span>
           <span className="admin-metric-card__subtext">
-            Historical average across served visitors
+            Weighted across {summary.totalServedToday} completed tokens
           </span>
         </div>
 
@@ -122,7 +122,7 @@ export function AnalyticsPage() {
             {summary.avgServiceTimeFormatted}
           </span>
           <span className="admin-metric-card__subtext">
-            Direct desk handling time average
+            Weighted handling duration per token
           </span>
         </div>
 
@@ -133,7 +133,7 @@ export function AnalyticsPage() {
             {summary.avgCounterUtilization}%
           </span>
           <span className="admin-metric-card__subtext">
-            {summary.activeCountersCount} of {summary.totalCountersCount} workstations active
+            {summary.activeCountersCount} of {summary.totalCountersCount} active desks (paused at 0%)
           </span>
         </div>
       </section>
@@ -173,18 +173,18 @@ export function AnalyticsPage() {
               {insights.highestDemandService.serviceName}
             </span>
             <span className="admin-insight-card__desc">
-              {insights.highestDemandService.volume} visitors served ({insights.highestDemandService.percentage}% of centre volume)
+              {insights.highestDemandService.requestsCount} requests ({insights.highestDemandService.percentage}% of centre volume)
             </span>
           </div>
 
-          {/* Highest Average Wait Bottleneck */}
+          {/* Highest Service Avg Wait */}
           <div className="admin-insight-card admin-insight-card--bottleneck">
-            <span className="admin-insight-card__type">Highest Average Wait</span>
+            <span className="admin-insight-card__type">Highest Service Avg. Wait</span>
             <span className="admin-insight-card__highlight">
-              {insights.highestWaitBottleneck.serviceName}
+              {insights.highestServiceAvgWait.serviceName}
             </span>
             <span className="admin-insight-card__desc">
-              Average wait reached {insights.highestWaitBottleneck.avgWaitFormatted} during peak operating hours
+              Service average wait reached {insights.highestServiceAvgWait.avgWaitFormatted} (benchmark 8m 00s)
             </span>
           </div>
 
@@ -200,6 +200,7 @@ export function AnalyticsPage() {
           </div>
         </div>
       </section>
+
 
       {/* ------------------------------------------------------------ */}
       {/*  3. HOURLY TELEMETRY (FOOTFALL & WAIT TIME CHARTS)           */}
@@ -271,7 +272,7 @@ export function AnalyticsPage() {
               </span>
             </div>
             <span className="admin-chart-card__badge admin-chart-card__badge--warning">
-              Max: 10m at 11:00
+              Peak Hourly Avg. Wait: 10m at 11:00
             </span>
           </div>
 
@@ -423,7 +424,7 @@ export function AnalyticsPage() {
                   </span>
                   <div className="admin-demand-row__stats">
                     <span className="admin-demand-row__vol">
-                      {item.customerVolume} Visitors
+                      {item.tokensGenerated} Requests
                     </span>
                     <span className="admin-demand-row__pct">
                       {item.percentage}%
@@ -504,10 +505,11 @@ export function AnalyticsPage() {
             <thead>
               <tr>
                 <th>Service Name</th>
-                <th>Customers Served</th>
+                <th>Requests (Demand)</th>
+                <th>Completed (Served)</th>
+                <th>Waiting</th>
                 <th>Avg. Wait Time</th>
                 <th>Avg. Service Time</th>
-                <th>Benchmark Duration</th>
                 <th>Missed Tokens</th>
                 <th>Operational Status</th>
               </tr>
@@ -520,9 +522,23 @@ export function AnalyticsPage() {
                     {row.serviceName}
                   </td>
 
+                  {/* Requests Generated (Demand) */}
+                  <td className="admin-analytics__mono">
+                    {row.tokensGenerated}
+                  </td>
+
                   {/* Customers Served */}
                   <td className="admin-analytics__mono">
                     {row.customersServed} Served
+                  </td>
+
+                  {/* Currently Waiting */}
+                  <td className="admin-analytics__mono">
+                    {row.currentlyWaiting > 0 ? (
+                      <span>{row.currentlyWaiting}</span>
+                    ) : (
+                      <span className="text-muted">0</span>
+                    )}
                   </td>
 
                   {/* Average Wait Time */}
@@ -533,11 +549,6 @@ export function AnalyticsPage() {
                   {/* Average Service Time */}
                   <td className="admin-analytics__mono">
                     {row.avgServiceFormatted}
-                  </td>
-
-                  {/* Expected Benchmark Duration */}
-                  <td className="admin-analytics__mono text-muted">
-                    {row.expectedDurationFormatted}
                   </td>
 
                   {/* Missed Tokens */}
@@ -566,3 +577,4 @@ export function AnalyticsPage() {
     </div>
   );
 }
+
