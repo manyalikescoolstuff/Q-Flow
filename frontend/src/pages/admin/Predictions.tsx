@@ -453,11 +453,11 @@ export function PredictionsPage() {
             <table className="admin-predictions__table">
               <thead>
                 <tr>
-                  <th>Service</th>
-                  <th>Expected Requests</th>
-                  <th>Expected Avg. Wait</th>
-                  <th>Available Desks</th>
-                  <th>Forecast Status</th>
+                  <th className="admin-predictions__th--service">Service</th>
+                  <th className="admin-predictions__th--requests">Expected Requests</th>
+                  <th className="admin-predictions__th--wait">Expected Avg. Wait</th>
+                  <th className="admin-predictions__th--desks">Available Desks</th>
+                  <th className="admin-predictions__th--status">Forecast Status</th>
                 </tr>
               </thead>
               <tbody>
@@ -469,22 +469,22 @@ export function PredictionsPage() {
                     </td>
 
                     {/* Expected Requests */}
-                    <td className="admin-predictions__mono">
+                    <td className="admin-predictions__mono admin-predictions__td--requests">
                       {row.expectedRequests}
                     </td>
 
                     {/* Expected Avg Wait */}
-                    <td className="admin-predictions__mono">
+                    <td className="admin-predictions__mono admin-predictions__td--wait">
                       {row.expectedAvgWaitFormatted}
                     </td>
 
                     {/* Available Counters */}
-                    <td className="admin-predictions__mono">
+                    <td className="admin-predictions__mono admin-predictions__td--desks">
                       {row.availableCounters} {row.availableCounters > 1 ? 'Counters' : 'Counter'}
                     </td>
 
                     {/* Forecast Load Status */}
-                    <td>
+                    <td className="admin-predictions__td--status">
                       <span
                         className={`admin-status-badge admin-status-badge--${row.statusTone}`}
                       >

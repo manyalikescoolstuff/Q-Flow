@@ -459,8 +459,8 @@
 
 .admin-predictions__split-grid {
   display: grid;
-  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.75fr);
-  gap: var(--space-6);
+  grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.88fr);
+  gap: var(--space-5);
   width: 100%;
   min-width: 0;
   box-sizing: border-box;
@@ -470,7 +470,7 @@
   background: var(--color-bg-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
-  padding: var(--space-5);
+  padding: var(--space-4) var(--space-5);
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
@@ -517,8 +517,8 @@
 .admin-predictions .admin-demand-row {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: var(--space-3);
+  gap: 6px;
+  padding: 10px var(--space-3);
   background: var(--color-bg-elevated);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
@@ -541,13 +541,13 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto auto;
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--space-2);
   width: 100%;
   min-width: 0;
 }
 
 .admin-predictions .admin-demand-row__name {
-  font-size: var(--fs-sm);
+  font-size: var(--fs-xs);
   font-weight: var(--fw-semibold);
   color: var(--color-text-primary);
   white-space: nowrap;
@@ -558,7 +558,7 @@
 
 .admin-predictions .admin-demand-row__vol {
   font-family: var(--font-mono);
-  font-size: var(--fs-xs);
+  font-size: 11px;
   font-weight: var(--fw-semibold);
   color: var(--color-text-secondary);
   white-space: nowrap;
@@ -567,18 +567,18 @@
 
 .admin-predictions .admin-demand-row__pct {
   font-family: var(--font-mono);
-  font-size: var(--fs-xs);
+  font-size: 11px;
   font-weight: var(--fw-semibold);
   color: var(--color-text-muted);
   white-space: nowrap;
   text-align: right;
-  min-width: 44px;
+  min-width: 36px;
   flex-shrink: 0;
 }
 
 .admin-predictions .admin-demand-row__bar-track {
   width: 100%;
-  height: 6px;
+  height: 5px;
   border-radius: 3px;
   background: rgba(0, 0, 0, 0.3);
   border: 1px solid var(--color-border);
@@ -613,28 +613,30 @@
   width: 100%;
   border-collapse: collapse;
   text-align: left;
-  font-size: var(--fs-sm);
+  font-size: var(--fs-xs);
   table-layout: auto;
 }
 
 .admin-predictions__table th {
-  padding: 8px 10px;
-  font-size: 11px;
+  padding: 8px 8px;
+  font-size: 10.5px;
   font-weight: var(--fw-semibold);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
   color: var(--color-text-muted);
   background: var(--color-bg-surface);
   border-bottom: 1px solid var(--color-border);
-  white-space: nowrap;
+  white-space: normal;
+  line-height: 1.25;
+  vertical-align: bottom;
 }
 
 .admin-predictions__table td {
-  padding: 9px 10px;
+  padding: 8px 8px;
   border-bottom: 1px solid var(--color-border);
   color: var(--color-text-primary);
   vertical-align: middle;
-  font-size: var(--fs-sm);
+  font-size: var(--fs-xs);
 }
 
 .admin-predictions__table tr:last-child td {
@@ -651,13 +653,35 @@
   white-space: normal;
   word-break: normal;
   line-height: 1.3;
-  min-width: 130px;
 }
 
 .admin-predictions__mono {
   font-family: var(--font-mono);
   font-weight: var(--fw-medium);
-  font-size: var(--fs-sm);
+  font-size: var(--fs-xs);
+}
+
+.admin-predictions__th--requests,
+.admin-predictions__td--requests {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.admin-predictions__th--wait,
+.admin-predictions__td--wait {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.admin-predictions__th--desks,
+.admin-predictions__td--desks {
+  text-align: center;
+  white-space: nowrap;
+}
+
+.admin-predictions__th--status,
+.admin-predictions__td--status {
+  text-align: center;
   white-space: nowrap;
 }
 
@@ -666,12 +690,13 @@
 .admin-predictions .admin-status-badge {
   display: inline-flex;
   align-items: center;
-  padding: 2px 8px;
+  justify-content: center;
+  padding: 2px 7px;
   border-radius: var(--radius-sm);
-  font-size: 11px;
+  font-size: 10.5px;
   font-weight: var(--fw-semibold);
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.03em;
   white-space: nowrap;
 }
 
@@ -720,3 +745,4 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
